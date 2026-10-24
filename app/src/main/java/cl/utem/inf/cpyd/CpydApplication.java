@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class CpydApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CpydApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(CpydApplication.class, args);
+    }
 }

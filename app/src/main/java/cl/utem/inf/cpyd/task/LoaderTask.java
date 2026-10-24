@@ -22,6 +22,11 @@ public class LoaderTask {
     }
 
     private void loadData() {
+        if (StringUtils.isBlank(filePath)) {
+            LOGGER.warn("No hay ruta al archivo de carga");
+            return;
+        }
+
         try {
             File file = new File(filePath);
             if (file.isFile() && file.canRead()) {
@@ -36,6 +41,8 @@ public class LoaderTask {
 
     @Scheduled(fixedDelayString = "${scheduler.once.task}")
     public void runOnce() {
+        LOGGER.info("=== Iniciando  la carga de datos ===");
         loadData();
+        LOGGER.info("=== Terminando la carga de datos ===");
     }
 }

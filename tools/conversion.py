@@ -9,7 +9,7 @@ df_list = []
 for pais, ticker in tickers.items():
     # Descargar datos diarios de todo el año 2025
     data = yf.download(
-        ticker, start="2024-01-01", end="2026-12-31", progress=False
+        ticker, start="2023-01-01", end="2026-12-31", progress=False
     )
 
     if not data.empty:

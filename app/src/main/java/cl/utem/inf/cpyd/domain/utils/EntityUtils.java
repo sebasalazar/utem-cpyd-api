@@ -35,8 +35,6 @@ import org.hibernate.proxy.HibernateProxy;
  */
 public final class EntityUtils {
 
-    
-
     /**
      * Constructor privado: esta clase no está diseñada para ser instanciada.
      *
