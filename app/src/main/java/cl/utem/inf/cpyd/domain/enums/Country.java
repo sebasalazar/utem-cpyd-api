@@ -33,12 +33,12 @@ public enum Country {
     /**
      * Constructor de la enumeración.
      *
-     * @param codigo Código de país de dos letras (ISO 3166-1 alpha-2).
+     * @param code Código de país de dos letras (ISO 3166-1 alpha-2).
      * @param name Nombre completo y oficial del país.
      * @param currency Código de la currency de curso legal (ISO 4217).
      */
-    Country(final String codigo, final String name, final String currency) {
-        this.code = codigo;
+    Country(final String code, final String name, final String currency) {
+        this.code = code;
         this.name = name;
         this.currency = currency;
     }

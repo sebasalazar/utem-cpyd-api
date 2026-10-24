@@ -29,11 +29,17 @@ public class LoaderTask {
 
         try {
             File file = new File(filePath);
-            if (file.isFile() && file.canRead()) {
-                loaderService.load(file);
-            } else {
-                LOGGER.error("No se ha encontrado el archivo {}", filePath);
+            if (!file.isFile()) {
+                LOGGER.error("La ruta {} no es un archivo", filePath);
+                return;
             }
+
+            if (!file.canRead()) {
+                LOGGER.error("El archivo {} no se puede leer por falta de permisos", filePath);
+                return;
+            }
+
+            loaderService.load(file);
         } catch (Exception e) {
             LOGGER.error("Error al cargar datos en el sistema", e);
         }
