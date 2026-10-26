@@ -1,5 +1,6 @@
 package cl.utem.inf.cpyd.api;
 
+import cl.utem.inf.cpyd.exceptions.AuthException;
 import cl.utem.inf.cpyd.exceptions.NoDataException;
 import cl.utem.inf.cpyd.exceptions.UtemException;
 import cl.utem.inf.cpyd.exceptions.ValidationException;
@@ -43,6 +44,15 @@ public class ApiExceptionHandler {
         }
 
         return pd;
+    }
+
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ProblemDetail> handleValidationException(HttpServletRequest request, AuthException ae) {
+        LOGGER.error("Ocurrió un error de autenticación", ae);
+
+        final HttpStatus status = HttpStatus.UNAUTHORIZED;
+        ProblemDetail problem = makeProblemDetail(request, status, ae.getMessage());
+        return ResponseEntity.status(status).body(problem);
     }
 
     @ExceptionHandler(ValidationException.class)

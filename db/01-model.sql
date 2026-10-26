@@ -1,6 +1,20 @@
 BEGIN;
 
 
+DROP TABLE IF EXISTS credentials CASCADE;
+CREATE TABLE credentials (
+    pk      bigint       GENERATED ALWAYS AS IDENTITY, -- Identificador único autoincremental
+    token   uuid         NOT NULL,
+    email   varchar(255) NOT NULL,
+    api_key varchar(255) NOT NULL,
+    created timestamptz  NOT NULL DEFAULT NOW(),       -- Fecha de creación del registro 
+    updated timestamptz  NOT NULL DEFAULT NOW(),       -- Fecha de actualización del registro
+    PRIMARY KEY (pk)
+);
+CREATE UNIQUE INDEX ON credentials(token);
+CREATE UNIQUE INDEX ON credentials(UPPER(email));
+
+
 DROP TABLE IF EXISTS exchanges CASCADE;
 CREATE TABLE exchanges (
     pk         bigint        GENERATED ALWAYS AS IDENTITY, -- Identificador único autoincremental
