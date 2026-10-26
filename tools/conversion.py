@@ -1,42 +1,55 @@
+# exchange_rate_generator.py
+import argparse
+import sys
 import pandas as pd
 import yfinance as yf
 
-# 1. Definir los pares de divisas (Chile = CLP=X, Colombia = COP=X)
-tickers = {"Chile": "CLP=X", "Colombia": "COP=X"}
+def configurar_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Generador de tipos de cambio diarios.")
+    parser.add_argument("--start", required=True, help="Fecha inicio (YYYY-MM-DD)")
+    parser.add_argument("--end", required=True, help="Fecha término (YYYY-MM-DD)")
+    parser.add_argument("--output", required=True, help="Ruta del archivo CSV de salida")
+    return parser
 
-df_list = []
+def main() -> None:
+    parser = configurar_parser()
+    args = parser.parse_args()
 
-for pais, ticker in tickers.items():
-    # Descargar datos diarios de todo el año 2025
-    data = yf.download(
-        ticker, start="2023-01-01", end="2026-12-31", progress=False
-    )
+    tickers = {"Chile": "CLP=X", "Colombia": "COP=X"}
+    df_list = []
 
-    if not data.empty:
-        # Extraer fecha y precio de cierre
-        df_temp = data["Close"].reset_index()
-        df_temp.columns = ["Fecha", "Cambio_USD"]
-        df_temp["País"] = pais
-        df_list.append(df_temp)
+    try:
+        for pais, ticker in tickers.items():
+            data = yf.download(
+                ticker, start=args.start, end=args.end, progress=False
+            )
+            if not data.empty:
+                df_temp = data["Close"].reset_index()
+                df_temp.columns = ["Fecha", "Cambio_USD"]
+                df_temp["País"] = pais
+                df_list.append(df_temp)
 
-# 2. Unir Chile y Colombia
-df_final = pd.concat(df_list, ignore_index=True)
+        df_final = pd.concat(df_list, ignore_index=True)
 
-# 3. Agregar Ecuador (Tasa constante = 1.00 por estar dolarizado)
-fechas_unicas = df_final["Fecha"].unique()
-df_ecuador = pd.DataFrame(
-    {"Fecha": fechas_unicas, "Cambio_USD": 1.00, "País": "Ecuador"}
-)
+        fechas_unicas = df_final["Fecha"].unique()
+        df_ecuador = pd.DataFrame(
+            {"Fecha": fechas_unicas, "Cambio_USD": 1.00, "País": "Ecuador"}
+        )
 
-# 4. Consolidar, ordenar y seleccionar las 3 columnas
-df_completo = (
-    pd.concat([df_final, df_ecuador], ignore_index=True)
-    .sort_values(by=["Fecha", "País"])
-    .reset_index(drop=True)
-)
+        df_completo = (
+            pd.concat([df_final, df_ecuador], ignore_index=True)
+            .sort_values(by=["Fecha", "País"])
+            .reset_index(drop=True)
+        )
+        df_completo = df_completo[["País", "Fecha", "Cambio_USD"]]
 
-df_completo = df_completo[["País", "Fecha", "Cambio_USD"]]
+        df_completo.to_csv(args.output, index=False)
+        print(f"Archivo generado exitosamente en: {args.output}")
+        sys.exit(0) # Código de éxito
 
-# 5. Guardar CSV
-df_completo.to_csv("tipo_cambio_diario_2025.csv", index=False)
-print(df_completo.head(10))
+    except Exception as e:
+        print(f"Error crítico durante la ejecución: {str(e)}", file=sys.stderr)
+        sys.exit(1) # Código de error
+
+if __name__ == "__main__":
+    main()
