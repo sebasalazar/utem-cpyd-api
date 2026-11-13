@@ -24,16 +24,19 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * Traduce excepciones de la aplicación y del framework en respuestas HTTP con
  * formato RFC 7807 ({@link org.springframework.http.ProblemDetail}).
  *
- * <p>Centraliza en un solo lugar la decisión de qué código HTTP corresponde a cada
+ * <p>
+ * Centraliza en un solo lugar la decisión de qué código HTTP corresponde a cada
  * error. Los controladores lanzan excepciones con significado de negocio y no
- * deciden el código de estado; así la política de errores es fácil de auditar y de
- * modificar.</p>
+ * deciden el código de estado; así la política de errores es fácil de auditar y
+ * de modificar.</p>
  *
- * <p>Cada respuesta incluye {@code type}, {@code title}, {@code status},
+ * <p>
+ * Cada respuesta incluye {@code type}, {@code title}, {@code status},
  * {@code detail}, {@code instance} (ruta solicitada), {@code timestamp},
  * {@code method} y, si existe, {@code query}.</p>
  *
- * <p>Por seguridad, los errores no previstos (HTTP 500) devuelven un mensaje
+ * <p>
+ * Por seguridad, los errores no previstos (HTTP 500) devuelven un mensaje
  * genérico y no el detalle interno de la excepción.</p>
  */
 @RestControllerAdvice
@@ -47,8 +50,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request petición HTTP original; puede ser {@code null}.
      * @param status código HTTP de la respuesta.
      * @param detail descripción del error destinada al cliente.
-     * @return un {@link org.springframework.http.ProblemDetail} enriquecido con el tipo,
-     * el título, la marca de tiempo, el método y la ruta.
+     * @return un {@link org.springframework.http.ProblemDetail} enriquecido con
+     * el tipo, el título, la marca de tiempo, el método y la ruta.
      */
     private ProblemDetail makeProblemDetail(HttpServletRequest request, HttpStatus status, String detail) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(status, detail);
@@ -124,8 +127,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Responde HTTP 422 para errores de negocio o de configuración que no encajan en otra
-     * categoría.
+     * Responde HTTP 422 para errores de negocio o de configuración que no
+     * encajan en otra categoría.
      *
      * @param request petición HTTP original.
      * @param ue excepción capturada.
@@ -159,7 +162,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Responde HTTP 429 cuando se superó el límite de intentos de autenticación.
+     * Responde HTTP 429 cuando se superó el límite de intentos de
+     * autenticación.
      *
      * @param request petición HTTP original.
      * @param e excepción capturada.
@@ -175,11 +179,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Responde HTTP 400 cuando un parámetro no puede convertirse a su tipo, por ejemplo
-     * una fecha mal escrita.
+     * Responde HTTP 400 cuando un parámetro no puede convertirse a su tipo, por
+     * ejemplo una fecha mal escrita.
      *
-     * <p>El mensaje indica solo el nombre del parámetro y no repite el valor recibido,
-     * para no reflejar entrada del usuario en la respuesta.</p>
+     * <p>
+     * El mensaje indica solo el nombre del parámetro y no repite el valor
+     * recibido, para no reflejar entrada del usuario en la respuesta.</p>
      *
      * @param request petición HTTP original.
      * @param e excepción de conversión capturada.
@@ -193,8 +198,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Captura cualquier excepción no prevista. Registra el seguimiento completo en el log
-     * y responde HTTP 500 con un mensaje genérico.
+     * Captura cualquier excepción no prevista. Registra el seguimiento completo
+     * en el log y responde HTTP 500 con un mensaje genérico.
      *
      * @param request petición HTTP original.
      * @param e excepción no controlada.

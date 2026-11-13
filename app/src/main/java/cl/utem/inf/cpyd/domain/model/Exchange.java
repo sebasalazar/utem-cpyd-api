@@ -2,8 +2,8 @@ package cl.utem.inf.cpyd.domain.model;
 
 import cl.utem.inf.cpyd.domain.enums.Country;
 import cl.utem.inf.cpyd.domain.enums.CountryConverter;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;

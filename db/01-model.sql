@@ -7,7 +7,7 @@ CREATE TABLE credentials (
     token   uuid         NOT NULL,
     email   varchar(255) NOT NULL,
     api_key varchar(255) NOT NULL,
-    active  boolean      NOT NULL DEFAULT false,
+    active  boolean      NOT NULL DEFAULT true,
     created timestamptz  NOT NULL DEFAULT NOW(),       -- Fecha de creación del registro 
     updated timestamptz  NOT NULL DEFAULT NOW(),       -- Fecha de actualización del registro
     PRIMARY KEY (pk)

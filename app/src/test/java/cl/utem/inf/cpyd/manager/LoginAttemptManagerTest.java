@@ -1,9 +1,8 @@
 package cl.utem.inf.cpyd.manager;
 
+import cl.utem.inf.cpyd.exceptions.TooManyRequestsException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import cl.utem.inf.cpyd.exceptions.TooManyRequestsException;
 import org.junit.jupiter.api.Test;
 
 class LoginAttemptManagerTest {

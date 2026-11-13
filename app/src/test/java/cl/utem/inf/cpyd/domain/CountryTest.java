@@ -1,11 +1,10 @@
 package cl.utem.inf.cpyd.domain;
 
+import cl.utem.inf.cpyd.domain.enums.Country;
+import cl.utem.inf.cpyd.domain.enums.CountryConverter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import cl.utem.inf.cpyd.domain.enums.Country;
-import cl.utem.inf.cpyd.domain.enums.CountryConverter;
 import org.junit.jupiter.api.Test;
 
 class CountryTest {

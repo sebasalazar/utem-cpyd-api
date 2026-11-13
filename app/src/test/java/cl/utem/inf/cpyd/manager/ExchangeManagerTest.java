@@ -1,11 +1,5 @@
 package cl.utem.inf.cpyd.manager;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-
 import cl.utem.inf.cpyd.domain.enums.Country;
 import cl.utem.inf.cpyd.domain.model.Exchange;
 import cl.utem.inf.cpyd.domain.repository.ExchangeRepository;
@@ -13,7 +7,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 class ExchangeManagerTest {
 

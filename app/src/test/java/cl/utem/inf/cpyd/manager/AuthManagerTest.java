@@ -1,12 +1,5 @@
 package cl.utem.inf.cpyd.manager;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import cl.utem.inf.cpyd.domain.model.Credential;
 import cl.utem.inf.cpyd.exceptions.ForbiddenException;
 import cl.utem.inf.cpyd.manager.helper.CacheHelper;
@@ -14,8 +7,14 @@ import cl.utem.inf.cpyd.utils.JwtUtils;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class AuthManagerTest {
 

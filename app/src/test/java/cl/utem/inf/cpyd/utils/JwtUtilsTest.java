@@ -1,9 +1,5 @@
 package cl.utem.inf.cpyd.utils;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import cl.utem.inf.cpyd.exceptions.ForbiddenException;
 import cl.utem.inf.cpyd.exceptions.UtemException;
 import cl.utem.inf.cpyd.exceptions.ValidationException;
@@ -14,6 +10,9 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.util.Date;
 import java.util.UUID;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 class JwtUtilsTest {
