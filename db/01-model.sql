@@ -4,7 +4,7 @@ BEGIN;
 DROP TABLE IF EXISTS credentials CASCADE;
 CREATE TABLE credentials (
     pk      bigint       GENERATED ALWAYS AS IDENTITY, -- Identificador único autoincremental
-    token   uuid         NOT NULL,
+    token   uuid         NOT NULL DEFAULT gen_random_uuid(),
     email   varchar(255) NOT NULL,
     api_key varchar(255) NOT NULL,
     active  boolean      NOT NULL DEFAULT true,
@@ -30,6 +30,20 @@ CREATE INDEX ON exchanges(ex_country);
 CREATE INDEX ON exchanges(ex_date);
 CREATE UNIQUE INDEX ON exchanges(ex_country, ex_date);
 
+
+DROP TABLE IF EXISTS sales CASCADE;
+CREATE TABLE sales (
+    pk       uuid           NOT NULL DEFAULT uuidv7() ,
+    country  smallint       NOT NULL,
+    customer uuid           NOT NULL,
+    receipt  uuid           NOT NULL,
+    trx_date timestamp      NOT NULL,
+    amount   numeric(21, 4) NOT NULL,
+    created  timestamptz    NOT NULL DEFAULT now(),
+    updated  timestamptz    NOT NULL DEFAULT now(),
+    PRIMARY KEY (pk)
+);
+CREATE UNIQUE INDEX ON sales(receipt);
 
 
 COMMIT;
