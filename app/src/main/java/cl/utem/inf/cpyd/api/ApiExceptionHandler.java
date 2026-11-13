@@ -1,6 +1,7 @@
 package cl.utem.inf.cpyd.api;
 
 import cl.utem.inf.cpyd.exceptions.AuthException;
+import cl.utem.inf.cpyd.exceptions.ForbiddenException;
 import cl.utem.inf.cpyd.exceptions.NoDataException;
 import cl.utem.inf.cpyd.exceptions.UtemException;
 import cl.utem.inf.cpyd.exceptions.ValidationException;
@@ -47,10 +48,19 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(AuthException.class)
-    public ResponseEntity<ProblemDetail> handleValidationException(HttpServletRequest request, AuthException ae) {
+    public ResponseEntity<ProblemDetail> handleAuthException(HttpServletRequest request, AuthException ae) {
         LOGGER.error("Ocurrió un error de autenticación", ae);
 
         final HttpStatus status = HttpStatus.UNAUTHORIZED;
+        ProblemDetail problem = makeProblemDetail(request, status, ae.getMessage());
+        return ResponseEntity.status(status).body(problem);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ProblemDetail> handleForbiddenException(HttpServletRequest request, ForbiddenException ae) {
+        LOGGER.error("Ocurrió un error con los permisos", ae);
+
+        final HttpStatus status = HttpStatus.FORBIDDEN;
         ProblemDetail problem = makeProblemDetail(request, status, ae.getMessage());
         return ResponseEntity.status(status).body(problem);
     }
@@ -75,7 +85,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(NoDataException.class)
-    public ResponseEntity<ProblemDetail> handleUtemException(HttpServletRequest request, NoDataException nde) {
+    public ResponseEntity<ProblemDetail> handleNoDataException(HttpServletRequest request, NoDataException nde) {
         LOGGER.error("No hay datos para generar una respuesta", nde);
 
         final HttpStatus status = HttpStatus.NOT_FOUND;

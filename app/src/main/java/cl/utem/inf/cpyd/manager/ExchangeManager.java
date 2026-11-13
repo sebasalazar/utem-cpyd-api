@@ -4,6 +4,7 @@ import cl.utem.inf.cpyd.domain.enums.Country;
 import cl.utem.inf.cpyd.domain.model.Exchange;
 import cl.utem.inf.cpyd.domain.repository.ExchangeRepository;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +27,13 @@ public class ExchangeManager {
         }
 
         return exchangeRepository.findByCountryAndDate(country, date);
+    }
+
+    public List<Exchange> getExchange(final Country country, final LocalDate startDate, final LocalDate endDate) {
+        if (country == null) {
+            return List.of();
+        }
+
+        return exchangeRepository.findByCountryAndOptionalDateRange(country, startDate, endDate);
     }
 }
