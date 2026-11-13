@@ -10,9 +10,9 @@ import org.hibernate.proxy.HibernateProxy;
  * Esta clase centraliza la resolución de la clase persistente de una entidad,
  * operación necesaria en toda implementación correcta de
  * {@link Object#equals(Object)} sobre entidades gestionadas por Hibernate. Al
- * estar aquí, tanto las entidades con clave generada ({@code IdEntityBase})
- * como las entidades con clave asignada ({@code Periodo}) comparten exactamente
- * el mismo criterio, sin duplicación.</p>
+ * estar aquí, tanto las entidades con clave generada (por ejemplo {@link cl.utem.inf.cpyd.domain.model.PkEntityBase})
+ * como las entidades con clave natural comparten exactamente el mismo criterio,
+ * sin duplicación.</p>
  *
  * <p>
  * <strong>Glosario:</strong></p>

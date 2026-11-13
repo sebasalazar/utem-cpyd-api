@@ -101,11 +101,13 @@ import java.time.OffsetDateTime;
  * <p>
  * <strong>Auditoría temporal:</strong></p>
  * <p>
- * Los campos {@code created} y {@code updated} se calculan en UTC mediante el
- * reloj devuelto por {@link #clock()}. El uso de UTC evita que el mismo
- * registro obtenga offsets distintos según la zona horaria configurada en cada
- * nodo del clúster o en cada contenedor. Para pruebas deterministas,
- * sobrescriba {@link #clock()} devolviendo un {@code Clock.fixed(...)}.</p>
+ * Los campos {@code created} y {@code updated} se calculan en UTC mediante
+ * {@link cl.utem.inf.cpyd.domain.utils.AuditClock#now()}. El uso de UTC evita que
+ * el mismo registro obtenga offsets distintos según la zona horaria configurada en
+ * cada nodo del clúster o en cada contenedor. Las entidades usan siempre el reloj
+ * del sistema: {@link cl.utem.inf.cpyd.domain.utils.AuditClock#now(java.time.Clock)}
+ * acepta un reloj externo para pruebas deterministas, pero los callbacks de JPA no
+ * lo reciben.</p>
  *
  * <p>
  * <strong>Nota sobre claves asignadas:</strong> las entidades cuya clave es un
@@ -198,6 +200,8 @@ public abstract class PkEntityBase implements Serializable {
     }
 
     /**
+     * Devuelve el identificador técnico de la fila.
+     *
      * @return El identificador generado por el motor de base de datos.
      */
     public Long getId() {
@@ -205,6 +209,8 @@ public abstract class PkEntityBase implements Serializable {
     }
 
     /**
+     * Asigna el identificador técnico de la entidad.
+     *
      * @param id Fuerza un identificador, no necesariamente se podrá persistir
      * dependerá del mecanismo interno.
      */
@@ -213,6 +219,8 @@ public abstract class PkEntityBase implements Serializable {
     }
 
     /**
+     * Devuelve la fecha de creación del registro.
+     *
      * @return Fecha de creación, en UTC.
      */
     public OffsetDateTime getCreated() {
@@ -237,6 +245,8 @@ public abstract class PkEntityBase implements Serializable {
     }
 
     /**
+     * Devuelve la fecha de la última modificación del registro.
+     *
      * @return Fecha de última actualización, en UTC.
      */
     public OffsetDateTime getUpdated() {

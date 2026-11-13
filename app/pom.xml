@@ -38,9 +38,12 @@
         <java.version>25</java.version>
         <springdoc.version>3.1.1</springdoc.version>
         <opencsv.version>5.12.0</opencsv.version>
+        <commons.collections4.version>4.5.0</commons.collections4.version>
+        <commons.text.version>1.13.1</commons.text.version>
         <jose.jwt.version>10.10</jose.jwt.version>
         <commons.validator.version>1.11.0</commons.validator.version>
         <java.uuid.generator.version>5.2.0</java.uuid.generator.version>
+        <jacoco.version>0.8.16</jacoco.version>
     </properties>
     
     <dependencies>
@@ -122,6 +125,18 @@
         </dependency>
         
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons.collections4.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${commons.text.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>${opencsv.version}</version>
@@ -166,12 +181,71 @@
 
     <build>
         <plugins>
+            <!-- Plugin de JaCoCo para medición de cobertura de código -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <!-- 
+                      Ejecución 1: Preparación del agente.
+                      Inyecta el agente de JaCoCo en la JVM antes de que se ejecuten los tests.
+                    -->
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    
+                    <!-- 
+                      Ejecución 2: Generación del reporte.
+                      Se vincula a la fase 'test' para generar el reporte inmediatamente 
+                      después de la ejecución de las pruebas unitarias.
+                    -->
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <!-- META-INF/build-info.properties: versión del proyecto para el User-Agent y OpenAPI (ApplicationInfo). -->
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Javadoc: registra las etiquetas de autoría personalizadas de los encabezados. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <tags>
+                        <tag>
+                            <name>email</name>
+                            <placement>a</placement>
+                            <head>Correo:</head>
+                        </tag>
+                        <tag>
+                            <name>institution</name>
+                            <placement>a</placement>
+                            <head>Institución:</head>
+                        </tag>
+                    </tags>
+                </configuration>
             </plugin>
         </plugins>
         <finalName>cpyd</finalName>
     </build>
+
 
 </project>

@@ -62,6 +62,11 @@ public class CacheHelper {
     private static final String CACHE_CREDENTIAL_BY_TOKEN = "credential-by-token";
     private static final String CACHE_CREDENTIAL_BY_EMAIL = "credential-by-email";
 
+    /**
+     * Crea el auxiliar con el repositorio de credenciales.
+     *
+     * @param credentialRepository repositorio consultado cuando la caché no tiene la entrada.
+     */
     public CacheHelper(CredentialRepository credentialRepository) {
         this.credentialRepository = credentialRepository;
     }
@@ -102,7 +107,18 @@ public class CacheHelper {
      * @return Un {@link Optional} conteniendo la credencial si existe, o vacío
      * si no.
      */
-    @Cacheable(cacheNames = CACHE_CREDENTIAL_BY_TOKEN, sync = true)
+    // Sin sync: "unless" no es compatible con sync, y se evita cachear resultados vacíos
+    /**
+     * Obtiene la credencial identificada por su token interno.
+     *
+     * <p>El resultado se guarda en la caché {@code credential-by-token}. Un resultado vacío
+     * no se guarda, porque la expresión {@code unless} actúa sobre el valor desenvuelto
+     * del {@link java.util.Optional}.</p>
+     *
+     * @param token identificador UUID de la credencial; si es {@code null}, devuelve vacío.
+     * @return la credencial si existe; vacío en otro caso.
+     */
+    @Cacheable(cacheNames = CACHE_CREDENTIAL_BY_TOKEN, unless = "#result == null")
     public Optional<Credential> getCredentialByToken(final UUID token) {
         if (token == null) {
             return Optional.empty();
@@ -118,7 +134,7 @@ public class CacheHelper {
      * @return Un {@link Optional} conteniendo la credencial si existe, o vacío
      * si no.
      */
-    @Cacheable(cacheNames = CACHE_CREDENTIAL_BY_EMAIL, sync = true)
+    @Cacheable(cacheNames = CACHE_CREDENTIAL_BY_EMAIL, unless = "#result == null")
     public Optional<Credential> getCredentialByEmail(final String email) {
         // Validación explícita y legible antes de invocar librerías externas o la BD
         if (email == null || email.isBlank() || !EmailValidator.getInstance().isValid(email)) {
@@ -128,16 +144,18 @@ public class CacheHelper {
     }
 
     /**
-     * Elimina todas las entradas de la caché de correos activos.
+     * Elimina las entradas de las tres cachés de credenciales: correos activos,
+     * credencial por token y credencial por correo.
      *
      * <p>
-     * La próxima llamada a {@link #getActiveEmails()} volverá a consultar la
-     * base de datos. Debe invocarse después de modificar el estado de una
-     * credencial (ej. activación, desactivación o eliminación de un
-     * usuario).</p>
+     * El nombre es anterior a esta ampliación y se conserva por compatibilidad.
+     * La próxima consulta volverá a leer la base de datos. Debe invocarse después
+     * de activar, desactivar o eliminar una credencial. Actualmente ningún flujo
+     * de la aplicación la invoca, por lo que el cambio tarda en aplicarse hasta
+     * que expira la caché.</p>
      */
-    @CacheEvict(allEntries = true, cacheNames = CACHE_ACTIVE_EMAILS)
+    @CacheEvict(allEntries = true, cacheNames = {CACHE_ACTIVE_EMAILS, CACHE_CREDENTIAL_BY_TOKEN, CACHE_CREDENTIAL_BY_EMAIL})
     public void clearActiveEmailsCache() {
-        LOGGER.info("Invalidando caché de correos activos por cambio en el dominio");
+        LOGGER.info("Invalidando cachés de credenciales por cambio en el dominio");
     }
 }

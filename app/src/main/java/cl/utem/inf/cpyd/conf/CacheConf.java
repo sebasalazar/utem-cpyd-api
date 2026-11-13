@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
  * Configuración de la caché en memoria de la aplicación, basada en Caffeine.
  *
  * <p>
- * La caché guarda el conjunto de códigos de curso válidos, que se consulta en
- * cada solicitud y cambia con muy poca frecuencia. Mantenerlo en memoria evita
+ * Las cachés guardan credenciales y el conjunto de correos activos, datos que se
+ * consultan en cada solicitud y cambian con poca frecuencia. Mantenerlo en memoria evita
  * una consulta a la base de datos por petición. Se usa Caffeine porque ofrece
  * una caché local, thread-safe y con expiración configurable, sin necesidad de
  * un servidor externo como Redis.</p>
@@ -103,7 +103,7 @@ public class CacheConf {
      * caché.
      *
      * <p>
-     * Se declara una única caché con nombre {@link #CACHE_NAME}, con expiración
+     * Las cachés se crean dinámicamente por nombre, todas con expiración
      * tras escritura, tamaño máximo y registro de estadísticas
      * ({@code recordStats}), que permite medir aciertos y fallos.</p>
      *
@@ -112,13 +112,15 @@ public class CacheConf {
      */
     @Bean
     public CacheManager cacheManager() {
-        final Caffeine<Object, Object> femsaCaffeineBuilder = Caffeine.newBuilder()
+        final Caffeine<Object, Object> caffeineBuilder = Caffeine.newBuilder()
                 .expireAfterWrite(this.expireMinutes, TimeUnit.MINUTES)
                 .maximumSize(this.maxSize)
                 .recordStats();
 
-        final CaffeineCacheManager cacheManager = new CaffeineCacheManager(CACHE_NAME);
-        cacheManager.setCaffeine(femsaCaffeineBuilder);
+        final CaffeineCacheManager cacheManager = new CaffeineCacheManager();
+        // Modo dinámico: las cachés se crean al primer uso con la misma política
+        // (las de CacheHelper usan sus propios nombres, no solo CACHE_NAME).
+        cacheManager.setCaffeine(caffeineBuilder);
 
         return cacheManager;
     }

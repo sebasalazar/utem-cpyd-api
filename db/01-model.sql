@@ -7,6 +7,7 @@ CREATE TABLE credentials (
     token   uuid         NOT NULL,
     email   varchar(255) NOT NULL,
     api_key varchar(255) NOT NULL,
+    active  boolean      NOT NULL DEFAULT false,
     created timestamptz  NOT NULL DEFAULT NOW(),       -- Fecha de creación del registro 
     updated timestamptz  NOT NULL DEFAULT NOW(),       -- Fecha de actualización del registro
     PRIMARY KEY (pk)
@@ -18,7 +19,7 @@ CREATE UNIQUE INDEX ON credentials(UPPER(email));
 DROP TABLE IF EXISTS exchanges CASCADE;
 CREATE TABLE exchanges (
     pk         bigint        GENERATED ALWAYS AS IDENTITY, -- Identificador único autoincremental
-    ex_country smallint      NOT NULL, -- País (Chile, Colombia o Ecuador)
+    ex_country smallint      NOT NULL, -- País: 0 = Chile, 1 = Colombia, 2 = Ecuador (ver Country.getId)
     ex_date    date          NOT NULL, -- fecha de la operación
     ex_rate    numeric(17,2) NOT NULL, -- VALOR en Moneda 
     created    timestamptz  NOT NULL DEFAULT NOW(),       -- Fecha de creación del registro 

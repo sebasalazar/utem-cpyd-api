@@ -38,7 +38,10 @@ import org.apache.commons.lang3.StringUtils;
 public final class JwtUtils {
 
     private static final String ISSUER = "api.sebastian.cl";
-    // Se utiliza un nombre descriptivo en lugar de "ct" para garantizar la legibilidad.
+    /**
+     * Nombre del claim que transporta el UUID de la credencial dentro del JWT.
+     * Se usa un nombre descriptivo en lugar de una abreviatura para facilitar la lectura.
+     */
     public static final String CLAIM_TOKEN_ID = "tokenId";
 
     // 67 minutos: duración deliberada para evitar colisiones con invalidaciones 

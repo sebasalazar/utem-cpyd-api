@@ -54,8 +54,9 @@ public interface ExchangeRepository extends JpaRepository<Exchange, Long> {
      * Nunca es {@code null}; puede estar vacía si no hay coincidencias.
      */
     @Query("SELECT e FROM Exchange e WHERE e.country = :country "
-            + "AND (:start IS NULL OR e.date >= :start) "
-            + "AND (:end IS NULL OR e.date <= :end)")
+            + " AND (:start IS NULL OR e.date >= :start) "
+            + " AND (:end IS NULL OR e.date <= :end) "
+            + " ORDER BY e.date, e.country ASC")
     List<Exchange> findByCountryAndOptionalDateRange(
             @Param("country") Country country,
             @Param("start") LocalDate start,

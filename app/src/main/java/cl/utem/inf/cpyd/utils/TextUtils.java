@@ -8,10 +8,9 @@ import org.apache.commons.text.StringEscapeUtils;
  * Utilidades para la manipulación y normalización de cadenas de texto.
  *
  * <p>
- * Centraliza la limpieza de la entrada del usuario (códigos de curso, RUT) para
- * que todas las comparaciones se hagan sobre una forma única. Sin esta
- * normalización, {@code " inf101 "} e {@code "INF101"} se tratarían como cursos
- * distintos. Todos los métodos son estáticos y no mantienen estado.</p>
+ * Centraliza la limpieza de la entrada del usuario para que todas las comparaciones
+ * se hagan sobre una forma única. Sin esta normalización, {@code " User@UTEM.cl "}
+ * y {@code "user@utem.cl"} se tratarían como correos distintos. Todos los métodos son estáticos y no mantienen estado.</p>
  *
  * <p>
  * Los métodos de conversión de caso usan {@link Locale#ROOT} para que el
