@@ -42,7 +42,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApiExceptionHandler.class);
+    // Dado que la clase extiende de ResponseEntityExceptionHandler, esta ya tiene una con nombre logger, se cambia para cumplir con sonar.
+    private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     /**
      * Construye el cuerpo de error estándar a partir del estado y del detalle.
@@ -87,7 +88,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<ProblemDetail> handleAuthException(HttpServletRequest request, AuthException ae) {
-        LOGGER.error("Ocurrió un error de autenticación", ae);
+        LOG.error("Ocurrió un error de autenticación", ae);
 
         final HttpStatus status = HttpStatus.UNAUTHORIZED;
         ProblemDetail problem = makeProblemDetail(request, status, ae.getMessage());
@@ -103,7 +104,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ProblemDetail> handleForbiddenException(HttpServletRequest request, ForbiddenException ae) {
-        LOGGER.error("Ocurrió un error con los permisos", ae);
+        LOG.error("Ocurrió un error con los permisos", ae);
 
         final HttpStatus status = HttpStatus.FORBIDDEN;
         ProblemDetail problem = makeProblemDetail(request, status, ae.getMessage());
@@ -119,7 +120,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ProblemDetail> handleValidationException(HttpServletRequest request, ValidationException ve) {
-        LOGGER.error("Ocurrió un error de validación", ve);
+        LOG.error("Ocurrió un error de validación", ve);
 
         final HttpStatus status = HttpStatus.BAD_REQUEST;
         ProblemDetail problem = makeProblemDetail(request, status, ve.getMessage());
@@ -136,7 +137,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(UtemException.class)
     public ResponseEntity<ProblemDetail> handleUtemException(HttpServletRequest request, UtemException ue) {
-        LOGGER.error("Ocurrió un error esperado", ue);
+        LOG.error("Ocurrió un error esperado", ue);
 
         final HttpStatus status = HttpStatus.UNPROCESSABLE_CONTENT;
 
@@ -153,7 +154,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(NoDataException.class)
     public ResponseEntity<ProblemDetail> handleNoDataException(HttpServletRequest request, NoDataException nde) {
-        LOGGER.error("No hay datos para generar una respuesta", nde);
+        LOG.error("No hay datos para generar una respuesta", nde);
 
         final HttpStatus status = HttpStatus.NOT_FOUND;
 
@@ -171,7 +172,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(TooManyRequestsException.class)
     public ResponseEntity<ProblemDetail> handleTooMany(HttpServletRequest request, TooManyRequestsException e) {
-        LOGGER.warn("Demasiados intentos de autenticación");
+        LOG.warn("Demasiados intentos de autenticación");
 
         final HttpStatus status = HttpStatus.TOO_MANY_REQUESTS;
         ProblemDetail problem = makeProblemDetail(request, status, e.getMessage());
@@ -207,7 +208,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleException(HttpServletRequest request, Exception e) {
-        LOGGER.error("Ocurrió un error INESPERADO", e);
+        LOG.error("Ocurrió un error INESPERADO", e);
 
         final HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
